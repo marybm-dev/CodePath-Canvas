@@ -17,6 +17,8 @@ class ViewController: UIViewController {
     var trayCenterWhenOpen: CGPoint!
     var trayCenterWhenClosed: CGPoint!
 
+    var newlyCreatedFace: UIImageView!
+    var newlyCreatedFaceOriginalCenter: CGPoint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,10 +46,30 @@ class ViewController: UIViewController {
                 })
             }
 
-        } else if panGestureRecognizer.state == .ended {
-            
         }
     }
+    
+    @IBAction func onSmileyPanGesture(_ panGestureRecognizer: UIPanGestureRecognizer) {
+        let imageView = panGestureRecognizer.view as! UIImageView
+        let translation = panGestureRecognizer.translation(in: parentView)
+        
+        if panGestureRecognizer.state == .began {
+            
+            
+            newlyCreatedFace = UIImageView(image: imageView.image)
+            parentView.addSubview(newlyCreatedFace)
+            
+            newlyCreatedFace.center = imageView.center
+            newlyCreatedFace.center.y += trayView.frame.origin.y
+            newlyCreatedFaceOriginalCenter = newlyCreatedFace.center
+            
+        } else if panGestureRecognizer.state == .changed {
+            newlyCreatedFace.center = CGPoint(x: newlyCreatedFaceOriginalCenter.x + translation.x, y: newlyCreatedFaceOriginalCenter.y + translation.y)
+            
+        }
+        
+    }
+    
 
 }
 
